@@ -238,8 +238,8 @@ namespace WalaSDK.Cryptography.ECC
             }
             else
             {
-                width = 8;
-                reqPreCompLen = 127;
+                width = 9;
+                reqPreCompLen = 130;
             }
 
             // The length of the precomputation array
@@ -379,8 +379,8 @@ namespace WalaSDK.Cryptography.ECC
         {
             if (p == null || n == null)
                 throw new ArgumentNullException();
-            if (n.Length != 32)
-                throw new ArgumentException();
+            //if (n.Length != 32)
+            //    throw new ArgumentException();
             if (p.IsInfinity)
                 return p;
             BigInteger k = new BigInteger(n.Reverse().Concat(new byte[1]).ToArray());

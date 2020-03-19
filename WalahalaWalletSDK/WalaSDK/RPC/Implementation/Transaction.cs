@@ -13,12 +13,30 @@ namespace WalaSDK.RPC.Implementation
 {
     public class Transaction :ITransaction
     {
+
+        public string GetWallet(string privateKey)
+        {
+            return Encoding.UTF8.GetString( Base58.Decode(privateKey));
+
+            
+      
+        }
+        public string Test()
+        {
+            return "";
+            
+        }
+        public string GetPrivateKey(string words)
+        {
+            return Base58.Encode(Encoding.UTF8.GetBytes(words));
+        }
         /// <summary>
         /// Generate new wallet for WHC
         /// </summary>
         /// <returns></returns>
         public Wallet GenerateWallet()
         {
+            
             Wallet wallet = new Wallet();
             Mnemonic mnemonic = new Mnemonic(Wordlist.English, WordCount.Eighteen);
             Mnemonic mnemonic1 = new Mnemonic(Wordlist.English, WordCount.Fifteen);

@@ -21,21 +21,22 @@ namespace WalaSDK.Cryptography
 
         public KeyPair(byte[] privateKey)
         {
-            if (privateKey.Length != 32 && privateKey.Length != 96 && privateKey.Length != 104)
-                throw new ArgumentException();
-            this.PrivateKey = new byte[32];
-            Buffer.BlockCopy(privateKey, privateKey.Length - 32, PrivateKey, 0, 32);
+            //if (privateKey.Length != 32 && privateKey.Length != 96 && privateKey.Length != 104)
+            //    throw new ArgumentException();
+            this.PrivateKey = new byte[privateKey.Length];
+            Buffer.BlockCopy(privateKey,0 , PrivateKey, 0, privateKey.Length);
 
             ECPoint pKey;
+            pKey = ECCurve.Secp256r1.G * privateKey;
 
-            if (privateKey.Length == 32)
-            {
-                pKey = ECCurve.Secp256r1.G * privateKey;
-            }
-            else
-            {
-                pKey = ECPoint.FromBytes(privateKey, ECCurve.Secp256r1);
-            }
+            ////if (privateKey.Length == 32)
+            ////{
+            
+            ////}
+            ////else
+            ////{
+            ////    pKey = ECPoint.FromBytes(privateKey, ECCurve.Secp256r1);
+            ////}
 
             var bytes = pKey.EncodePoint(true).ToArray();
             this.CompressedPublicKey = bytes;
@@ -70,8 +71,8 @@ namespace WalaSDK.Cryptography
             byte[] data1 = wif.Base58CheckDecode();
             if (data1.Length != lengthofmenimonic || data1[0] != 0x57 || data1[lengthofmenimonic - 1] != 0x01)
                 throw new FormatException();
-            byte[] PrivateKeyOfmenimonic = new byte[32];
-            Buffer.BlockCopy(data1, 1, PrivateKeyOfmenimonic, 0, PrivateKeyOfmenimonic.Length);
+            byte[] PrivateKeyOfmenimonic = new byte[lengthofmenimonic];
+            Buffer.BlockCopy(data1, 1, PrivateKeyOfmenimonic, 0, PrivateKeyOfmenimonic.Length-1);
             Array.Clear(data1, 0, data1.Length);
 
             KeyPair menimonickeypair = new KeyPair(PrivateKeyOfmenimonic);
