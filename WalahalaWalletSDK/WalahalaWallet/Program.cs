@@ -19,9 +19,9 @@ namespace WalahalaWallet
             ///Transaction object
             ITransaction transaction = new Transaction();
 
-             // var res = transaction.GenerateWallet("host blur addict matter leg beyond super sausage hawk deny ring spin practice midnight gold spider mail shove oval raccoon object upon rescue rather report arm rubber output skate hold slam maze educate");
-             // var res1 = transaction.GenerateWallet(" rotate notice logic silver pen live sting frozen defy latin ten noise enjoy figure");
-             // var w =transaction.GetWallet(res.PrivateKey);
+            // var res = transaction.GenerateWallet("host blur addict matter leg beyond super sausage hawk deny ring spin practice midnight gold spider mail shove oval raccoon object upon rescue rather report arm rubber output skate hold slam maze educate");
+            // var res1 = transaction.GenerateWallet(" rotate notice logic silver pen live sting frozen defy latin ten noise enjoy figure");
+            // var w =transaction.GetWallet(res.PrivateKey);
             // var res =transaction.Test();
             // var wall =transaction.GetWallet(res);
 
@@ -29,11 +29,12 @@ namespace WalahalaWallet
 
             /// GENERATE WALLET
             /// 
-            var wallet = transaction.GenerateWallet("host blur addict matter leg beyond super sausage hawk deny ring spin practice midnight gold spider mail shove oval raccoon object upon rescue rather report arm rubber output skate hold slam maze educate");
+            // var wallet = transaction.GenerateWallet("host blur addict matter leg beyond super sausage hawk deny ring spin practice midnight gold spider mail shove oval raccoon object upon rescue rather report arm rubber output skate hold slam maze educate");
+            var wallet = transaction.GenerateWallet();
             Console.WriteLine(wallet.Address);
             /// GET BALANCE
             /// 
-            var balance = transaction.GetBalance("WPGBc4quEmCUhA6DgJdbQBD4tA8zrYffqf", "http://coin.walahala.org/api/");
+            var balance = transaction.GetBalance(wallet.Address, "http://coin.walahala.org/api/");
             Console.WriteLine(balance);
 
             /// Generate a signed transaction ofline
