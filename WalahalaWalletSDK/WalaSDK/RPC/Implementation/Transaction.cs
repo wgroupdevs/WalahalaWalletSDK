@@ -21,11 +21,6 @@ namespace WalaSDK.RPC.Implementation
             
       
         }
-        public string Test()
-        {
-            return "";
-            
-        }
         public string GetPrivateKey(string words)
         {
             return Base58.Encode(Encoding.UTF8.GetBytes(words));

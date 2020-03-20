@@ -21,22 +21,13 @@ namespace WalaSDK.Cryptography
 
         public KeyPair(byte[] privateKey)
         {
-            //if (privateKey.Length != 32 && privateKey.Length != 96 && privateKey.Length != 104)
-            //    throw new ArgumentException();
+            if (privateKey.Length != 32 && privateKey.Length != 96 && privateKey.Length != 104)
+                throw new ArgumentException();
             this.PrivateKey = new byte[privateKey.Length];
             Buffer.BlockCopy(privateKey,0 , PrivateKey, 0, privateKey.Length);
 
             ECPoint pKey;
             pKey = ECCurve.Secp256r1.G * privateKey;
-
-            ////if (privateKey.Length == 32)
-            ////{
-            
-            ////}
-            ////else
-            ////{
-            ////    pKey = ECPoint.FromBytes(privateKey, ECCurve.Secp256r1);
-            ////}
 
             var bytes = pKey.EncodePoint(true).ToArray();
             this.CompressedPublicKey = bytes;
@@ -54,10 +45,31 @@ namespace WalaSDK.Cryptography
 
 
         }
-
-        public static KeyPair Mnemonickeypair(string menimonic)
+        public static string HashString(string text)
         {
-            var getmenimonicBytes = Encoding.ASCII.GetBytes(menimonic);
+            const string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            byte[] bytes = Encoding.UTF8.GetBytes(text);
+
+            System.Security.Cryptography.SHA256Managed hashstring = new System.Security.Cryptography.SHA256Managed();
+            byte[] hash = hashstring.ComputeHash(bytes);
+
+            char[] hash2 = new char[32];
+
+            // Note that here we are wasting bits of hash! 
+            // But it isn't really important, because hash.Length == 32
+            for (int i = 0; i < hash2.Length; i++)
+            {
+                hash2[i] = chars[hash[i] % chars.Length];
+            }
+
+            return new string(hash2) + "WP";
+        }
+        public static KeyPair Mnemonickeypair(string mnemonics)
+        {
+            ///
+            //UPDATE: CONVERTING MNEMONICS TO 32 BYTE HASH
+            var mnemonicHash = HashString(mnemonics);
+            var getmenimonicBytes = Encoding.ASCII.GetBytes(mnemonicHash);
             var lengthofmenimonic = getmenimonicBytes.Length;
 
             byte[] data = new byte[lengthofmenimonic];
@@ -71,8 +83,8 @@ namespace WalaSDK.Cryptography
             byte[] data1 = wif.Base58CheckDecode();
             if (data1.Length != lengthofmenimonic || data1[0] != 0x57 || data1[lengthofmenimonic - 1] != 0x01)
                 throw new FormatException();
-            byte[] PrivateKeyOfmenimonic = new byte[lengthofmenimonic];
-            Buffer.BlockCopy(data1, 1, PrivateKeyOfmenimonic, 0, PrivateKeyOfmenimonic.Length-1);
+            byte[] PrivateKeyOfmenimonic = new byte[32];
+            Buffer.BlockCopy(data1, 1, PrivateKeyOfmenimonic, 0, PrivateKeyOfmenimonic.Length);
             Array.Clear(data1, 0, data1.Length);
 
             KeyPair menimonickeypair = new KeyPair(PrivateKeyOfmenimonic);

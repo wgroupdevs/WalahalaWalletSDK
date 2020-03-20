@@ -4,7 +4,7 @@ namespace WalaSDK.RPC.Interface
 {
     public interface ITransaction {
 
-        string Test();
+      
         string GetPrivateKey(string words);
         string GetWallet(string privateKey);
        /// <summary>
